@@ -37,7 +37,7 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             //menu.Items.Add("最小化");
             //chromiumWebBrowser.ContextMenuStrip = menu;
 
-            return false;
+            return true;//返回true则不显示，返回false则显示
         }
     }
 }

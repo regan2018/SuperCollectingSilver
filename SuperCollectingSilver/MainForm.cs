@@ -50,7 +50,16 @@ namespace SuperCollectingSilver
 
             //myBrowser.Navigate("http://192.168.0.102:8080/WDSHGL");
             //myBrowser.Navigate("http://localhost:8080/WDSHGL");
-            myBrowser.Navigate("http://119.23.15.8:8080/tty");
+            string baseUrl = "http://119.23.15.8:8080/tty";
+            try
+            {
+                baseUrl=ConfigurationManager.AppSettings["BaseUrl"];
+            }
+            catch (Exception) {
+                baseUrl = "http://119.23.15.8:8080/tty";
+            }
+
+            myBrowser.Navigate(baseUrl);
             //myBrowser.Navigate(path);
 
         }
