@@ -87,7 +87,11 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             #endregion
 
             webBrowser.Dock = DockStyle.Fill;
-            webBrowser.Margin = new Padding(0, 0, 0, 0);
+            //webBrowser.Size = mainWindow.Size;
+            //webBrowser.Anchor = AnchorStyles.Bottom;
+            //webBrowser.Anchor = AnchorStyles.Left;
+            //webBrowser.Anchor = AnchorStyles.Right;
+            //webBrowser.Anchor = AnchorStyles.Top;
             //添加到窗体中
             mainWindow.Controls.Add(webBrowser);
             return instance;

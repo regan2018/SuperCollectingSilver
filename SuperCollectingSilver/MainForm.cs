@@ -15,6 +15,9 @@ using System.Collections;
 using SuperCollectingSilver.com.he.util;
 using CefSharp;
 using SuperCollectingSilver.com.he.ExtChromiumBrowser;
+using System.Diagnostics;
+using OAUS.Core;
+using System.Configuration;
 
 namespace SuperCollectingSilver
 {
@@ -25,11 +28,16 @@ namespace SuperCollectingSilver
 
         private string printFilePath;//测试打印文件路径
 
+        private string oausServerIP = "127.0.0.1";//默认升级程序服务地址
+        private int oausServerPort = 4540;//默认升级程序服务请求商品
+
         public MainForm()
         {
             InitializeComponent();
 
             this.Load += MainForm_Load;
+
+            this.Check();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -46,7 +54,42 @@ namespace SuperCollectingSilver
             //myBrowser.Navigate(path);
 
         }
-        
+
+        #region 检查更新
+        public void Check()
+        {
+            try
+            {
+                try
+                {
+                    oausServerIP = ConfigurationManager.AppSettings["UpdateUrl"].ToString();
+                    oausServerPort = int.Parse(ConfigurationManager.AppSettings["UpdatePort"].ToString());
+                }
+                catch { }
+                bool flag = VersionHelper.HasNewVersion(oausServerIP, oausServerPort);
+
+                if (flag)
+                {
+                    bool flag2 = DialogResult.OK == MessageBox.Show("亲,有新版本哦,赶快点击“确定”升级吧！", "升级提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                    if (flag2)
+                    {
+                        string fileName = AppDomain.CurrentDomain.BaseDirectory + "AutoUpdater\\AutoUpdater.exe";
+                        Process process = Process.Start(fileName);
+                        Process.GetCurrentProcess().Kill();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("获取版本信息失败！");
+                LogHelper.WriteLog(typeof(MainForm), ex.Message + "  :获取更新信息异常，请手动下载更新包！");
+            }
+        }
+
+
+        #endregion
+
+
         #region 右下角Icon图标右键菜单
 
         private void 打印设置ToolStripMenuItem_Click(object sender, EventArgs e)
