@@ -18,7 +18,7 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
     {
         private static readonly MyChromiumBrowser instance = new MyChromiumBrowser();
         private static ChromiumWebBrowser webBrowser;//浏览器
-        private static Form mainWindow;//承载浏览器的窗体类，必须设置
+        private static MainForm mainWindow;//承载浏览器的窗体类，必须设置
 
         //static MyChromiumBrowser() { }
         private MyChromiumBrowser()
@@ -75,7 +75,7 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
         /// <summary>
         /// 获取实例
         /// </summary>
-        public static MyChromiumBrowser Instance(Form mainWindow) {
+        public static MyChromiumBrowser Instance(MainForm mainWindow) {
 
             MyChromiumBrowser.mainWindow = mainWindow;
 
@@ -87,14 +87,22 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             #endregion
 
             webBrowser.Dock = DockStyle.Fill;
-            //webBrowser.Size = mainWindow.Size;
-            //webBrowser.Anchor = AnchorStyles.Bottom;
-            //webBrowser.Anchor = AnchorStyles.Left;
-            //webBrowser.Anchor = AnchorStyles.Right;
-            //webBrowser.Anchor = AnchorStyles.Top;
-            //添加到窗体中
-            mainWindow.Controls.Add(webBrowser);
+            //添加到窗体中的panel容器中
+            mainWindow.panel.Controls.Add(webBrowser);
+
+            mainWindow.panel.Dock = DockStyle.Fill;
+            mainWindow.panel.SizeChanged += Panel_SizeChanged;
+            Panel_SizeChanged(null, null);
+
             return instance;
+        }
+
+        private static void Panel_SizeChanged(object sender, EventArgs e)
+        {
+            mainWindow.panel.Width = mainWindow.Width;
+            mainWindow.panel.Height = mainWindow.Height-35;
+            mainWindow.panel.Top = -5;
+            mainWindow.panel.Left = 0;
         }
 
         #region cefSharp与js交互

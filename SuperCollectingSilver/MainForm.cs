@@ -31,6 +31,8 @@ namespace SuperCollectingSilver
         private string oausServerIP = "127.0.0.1";//默认升级程序服务地址
         private int oausServerPort = 4540;//默认升级程序服务请求商品
 
+        public Panel panel;
+
         public MainForm()
         {
             InitializeComponent();
@@ -42,6 +44,9 @@ namespace SuperCollectingSilver
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.panel = new Panel();
+            this.Controls.Add(panel);
+
             var path = Application.StartupPath + "\\HtmlUI\\test.html";
             //path= System.Web.HttpUtility.UrlEncode(path);
             path = path.Replace("#", "%23");
@@ -58,11 +63,11 @@ namespace SuperCollectingSilver
             catch (Exception) {
                 baseUrl = "http://119.23.15.8:8080/tty";
             }
-
             myBrowser.Navigate(baseUrl);
-            //myBrowser.Navigate(path);
+            
 
         }
+
 
         #region 检查更新
         public void Check()
