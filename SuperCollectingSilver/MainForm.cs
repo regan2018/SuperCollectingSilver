@@ -64,7 +64,6 @@ namespace SuperCollectingSilver
                 baseUrl = "http://119.23.15.8:8080/tty";
             }
             myBrowser.Navigate(baseUrl);
-            
 
         }
 

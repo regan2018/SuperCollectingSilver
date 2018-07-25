@@ -93,7 +93,6 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             mainWindow.panel.Dock = DockStyle.Fill;
             mainWindow.panel.SizeChanged += Panel_SizeChanged;
             Panel_SizeChanged(null, null);
-
             return instance;
         }
 

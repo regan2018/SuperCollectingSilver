@@ -15,29 +15,39 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
 
         public void OnBeforeContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model)
         {
-            
+            model.Clear();
+            model.AddItem(CefMenuCommand.Copy, "复制");
+            model.AddItem(CefMenuCommand.Paste, "粘贴");
+            model.AddItem(CefMenuCommand.Print, "打印");
         }
 
         public bool OnContextMenuCommand(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, CefMenuCommand commandId, CefEventFlags eventFlags)
         {
+            switch (commandId)
+            {
+                case CefMenuCommand.Copy://复制
+                    var selectText= parameters.SelectionText;//获取选中的内容
+                    frame.Copy();
+                    break;
+                case CefMenuCommand.Paste://粘贴
+                    frame.Paste();
+                    break;
+                case CefMenuCommand.Print://打印
+                    browser.Print();
+                    break;
+            }
+
             return true;
         }
 
         public void OnContextMenuDismissed(IWebBrowser browserControl, IBrowser browser, IFrame frame)
         {
-            //var chromiumWebBrowser = (ChromiumWebBrowser)browserControl;
-            //chromiumWebBrowser.ContextMenu = null;
+            
         }
 
         public bool RunContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model, IRunContextMenuCallback callback)
         {
-            //var chromiumWebBrowser = (ChromiumWebBrowser)browserControl;
-
-            //var menu = new ContextMenuStrip();
-            //menu.Items.Add("最小化");
-            //chromiumWebBrowser.ContextMenuStrip = menu;
-
-            return true;//返回true则不显示，返回false则显示
+            return false;//返回true则不显示，返回false则显示
         }
     }
 }
