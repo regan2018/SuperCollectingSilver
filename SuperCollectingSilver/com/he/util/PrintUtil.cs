@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SuperCollectingSilver.com.he.ExtChromiumBrowser;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,6 +39,17 @@ namespace SuperCollectingSilver.com.he.util
             this.printFilePath = printFilePath;
             this.webBrowser.Navigate(printFilePath);
         }
+        /// <summary>
+        /// 设置预打印的html内容，并执行对应的操作
+        /// </summary>
+        /// <param name="printHtml">预打印的html内容</param>
+        /// <param name="actionType">操作</param>
+        public void SetPrintHtml(string printHtml, ActionType actionType)
+        {
+            this.actionType = actionType;
+            this.printFilePath=MyChromiumBrowser.HtmlTextConvertFile(printHtml);
+            this.webBrowser.Navigate(this.printFilePath);
+        }
 
         private void WebBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
@@ -70,7 +82,7 @@ namespace SuperCollectingSilver.com.he.util
 
             if (File.Exists(printFilePath))
             {
-                //File.Delete(printFilePath);
+                File.Delete(printFilePath);
             }
         }
 

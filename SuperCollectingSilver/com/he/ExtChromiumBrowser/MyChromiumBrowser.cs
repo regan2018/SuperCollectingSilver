@@ -143,7 +143,10 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             mainWindow.Invoke((EventHandler)delegate
             {
                 //设置预打印文件的路径，并执行对应的操作,data为打印文件路径
-                PrintUtil.Instance.SetPrintFilePath(data, actionType);
+                //PrintUtil.Instance.SetPrintFilePath(data, actionType);
+
+                //设置预打印的html内容，并执行对应的操作,data为打印文件路径
+                PrintUtil.Instance.SetPrintHtml(data, actionType);
             });
 
         }
@@ -165,7 +168,7 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
         /// </summary>
         /// <param name="strHtml">HTML文本内容</param>
         /// <returns>HTML文件的路径</returns>
-        public string HtmlTextConvertFile(string strHtml)
+        public static string HtmlTextConvertFile(string strHtml)
         {
             if (string.IsNullOrEmpty(strHtml))
             {
