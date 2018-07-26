@@ -48,7 +48,6 @@ namespace SuperCollectingSilver
             this.Controls.Add(panel);
 
             var path = Application.StartupPath + "\\HtmlUI\\test.html";
-            //path= System.Web.HttpUtility.UrlEncode(path);
             path = path.Replace("#", "%23");
             
             myBrowser = MyChromiumBrowser.Instance(this);
