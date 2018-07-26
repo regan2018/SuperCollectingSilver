@@ -174,8 +174,7 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
 
             try
             {
-                string path = @"d:\html\";
-                //string path = AppDomain.CurrentDomain.BaseDirectory.ToString() + @"html\";
+                string path = AppDomain.CurrentDomain.BaseDirectory.ToString() + @"html\";
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
