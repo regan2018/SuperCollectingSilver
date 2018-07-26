@@ -124,8 +124,9 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
         /// <param name="action">动作：print=打印，printSet=打印设置，printPreview=打印预览</param>
         public void cefQuery(string data, string action)
         {
+            //将数据转成html文件
             data= HtmlTextConvertFile(data);
-            //printFilePath = HtmlTextConvertFile(data);
+
             ActionType actionType = ActionType.直接打印;
             if ("print".ToLower().Equals(action.ToLower().Trim()))
             {
@@ -139,14 +140,10 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             {
                 actionType = ActionType.打印预览;
             }
-            //printFilePath = AppDomain.CurrentDomain.BaseDirectory.ToString() + @"html\201807180916089613572.html";
             mainWindow.Invoke((EventHandler)delegate
             {
                 //设置预打印文件的路径，并执行对应的操作,data为打印文件路径
-                //PrintUtil.Instance.SetPrintFilePath(data, actionType);
-
-                //设置预打印的html内容，并执行对应的操作,data为打印文件路径
-                PrintUtil.Instance.SetPrintHtml(data, actionType);
+                PrintUtil.Instance.SetPrintFilePath(data, actionType);
             });
 
         }
@@ -177,7 +174,8 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
 
             try
             {
-                string path = AppDomain.CurrentDomain.BaseDirectory.ToString() + @"html\";
+                string path = @"d:\html\";
+                //string path = AppDomain.CurrentDomain.BaseDirectory.ToString() + @"html\";
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);

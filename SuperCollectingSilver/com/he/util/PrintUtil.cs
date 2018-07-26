@@ -32,23 +32,9 @@ namespace SuperCollectingSilver.com.he.util
         /// <param name="actionType">操作</param>
         public void SetPrintFilePath(string printFilePath,ActionType actionType)
         {
-            //this.webBrowser = new WebBrowser();
-            //this.webBrowser.Hide();
-            //this.webBrowser.DocumentCompleted += WebBrowser_DocumentCompleted;
             this.actionType = actionType;
             this.printFilePath = printFilePath;
             this.webBrowser.Navigate(printFilePath);
-        }
-        /// <summary>
-        /// 设置预打印的html内容，并执行对应的操作
-        /// </summary>
-        /// <param name="printHtml">预打印的html内容</param>
-        /// <param name="actionType">操作</param>
-        public void SetPrintHtml(string printHtml, ActionType actionType)
-        {
-            this.actionType = actionType;
-            this.printFilePath=MyChromiumBrowser.HtmlTextConvertFile(printHtml);
-            this.webBrowser.Navigate(this.printFilePath);
         }
 
         private void WebBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
