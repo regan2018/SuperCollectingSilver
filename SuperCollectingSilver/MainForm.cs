@@ -28,7 +28,7 @@ namespace SuperCollectingSilver
 
         private string printFilePath;//测试打印文件路径
 
-        private string oausServerIP = "127.0.0.1";//默认升级程序服务地址
+        private string oausServerIP = "119.23.15.8";//默认升级程序服务地址
         private int oausServerPort = 4540;//默认升级程序服务请求商品
 
         public Panel panel;
