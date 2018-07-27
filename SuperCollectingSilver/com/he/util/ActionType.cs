@@ -11,6 +11,7 @@ namespace SuperCollectingSilver.com.he.util
         直接打印=1,
         打印设置=2,
         打印预览=3,
-        弹窗打印=4
+        弹窗打印=4,
+        第二显示器=5
     }
 }

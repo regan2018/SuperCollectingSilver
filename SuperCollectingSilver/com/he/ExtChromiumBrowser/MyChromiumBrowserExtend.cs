@@ -12,16 +12,31 @@ using System.Windows.Forms;
 namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
 {
     /// <summary>
-    /// 自定义谷歌内核浏览器
+    /// 自定义谷歌内核浏览器--扩展（支持第二屏幕显示用）
     /// </summary>
-    class MyChromiumBrowser: Control
+    public class MyChromiumBrowserExtend : Control
     {
-        private static readonly MyChromiumBrowser instance = new MyChromiumBrowser();
-        private static ChromiumWebBrowser webBrowser;//浏览器
-        private static MainForm mainWindow;//承载浏览器的窗体类，必须设置
+        private ChromiumWebBrowser webBrowser;//浏览器
 
-        //static MyChromiumBrowser() { }
-        private MyChromiumBrowser()
+
+        /// <summary>
+        /// 承载浏览器的窗体类，必须设置
+        /// </summary>
+        private MainForm mainWindow;
+
+        /// <summary>
+        /// 承载浏览器的窗体类，需要第二显示器显示时设置
+        /// </summary>
+        public SecondScreenShowForm secodeScreenShowWindow;
+
+        private Form window;
+
+
+        #region 浏览器初始化
+        /// <summary>
+        /// 浏览器初始化
+        /// </summary>
+        public static void BrowserInit()
         {
             #region 浏览器全局设置
             var setting = new CefSharp.CefSettings();
@@ -48,6 +63,16 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             CefSharp.Cef.Initialize(setting);
             #endregion
 
+        }
+        #endregion
+
+        #region 公共设置
+        /// <summary>
+        /// 公共设置
+        /// </summary>
+        private void publicSet()
+        {
+
             webBrowser = new ChromiumWebBrowser("about:blank");
 
             #region 设置js与cefSharp互通
@@ -61,9 +86,9 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             bset.WebSecurity = CefState.Disabled;//禁用跨域限制
             webBrowser.BrowserSettings = bset;
 
-            //webBrowser.DownloadHandler = new DownloadHandler();
-            //webBrowser.KeyboardHandler = new KeyBoardHandler();
-            
+            webBrowser.DownloadHandler = new DownloadHandler();
+            webBrowser.KeyboardHandler = new KeyBoardHandler();
+
             //MenuHandler.mainWindow = mainWindow;
             //webBrowser.MenuHandler = new MenuHandler();
 
@@ -71,13 +96,20 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             //webBrowser.Margin = new Padding(0, 0, 0, 0);
             //mainWindow.Controls.Add(webBrowser);
         }
+        #endregion
+
+        public MyChromiumBrowserExtend() { }
 
         /// <summary>
         /// 获取实例
+        /// <param name="mainWindow">主屏显示的窗体</param>
         /// </summary>
-        public static MyChromiumBrowser Instance(MainForm mainWindow) {
-
-            MyChromiumBrowser.mainWindow = mainWindow;
+        public MyChromiumBrowserExtend(MainForm mainWindow)
+        {
+            this.publicSet();
+            
+            this.mainWindow = mainWindow;
+            this.window = this.mainWindow;
 
             #region 处理一些浏览器事件
             webBrowser.DownloadHandler = new DownloadHandler();
@@ -95,10 +127,41 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             mainWindow.panel.Dock = DockStyle.Fill;
             mainWindow.panel.SizeChanged += Panel_SizeChanged;
             Panel_SizeChanged(null, null);
-            return instance;
+
         }
 
-        private static void WebBrowser_KeyUp(object sender, KeyEventArgs e)
+        
+        /// <summary>
+        /// 获取实例
+        /// </summary>
+        /// <param name="seconddScreenShowWindow">第二屏幕显示的窗体</param>
+        /// <returns></returns>
+        public MyChromiumBrowserExtend(SecondScreenShowForm secodeScreenShowWindow)
+        {
+            this.publicSet();
+
+            this.secodeScreenShowWindow = secodeScreenShowWindow;
+            this.window = this.secodeScreenShowWindow;
+
+            #region 处理一些浏览器事件
+            webBrowser.DownloadHandler = new DownloadHandler();
+            webBrowser.KeyboardHandler = new KeyBoardHandler();
+            MenuHandler.mainWindow = secodeScreenShowWindow;
+            webBrowser.MenuHandler = new MenuHandler();
+
+            webBrowser.KeyUp += WebBrowser_KeyUp;
+            #endregion
+
+            webBrowser.Dock = DockStyle.Fill;
+            //添加到窗体中的panel容器中
+            secodeScreenShowWindow.panel.Controls.Add(webBrowser);
+
+            secodeScreenShowWindow.panel.Dock = DockStyle.Fill;
+            secodeScreenShowWindow.panel.SizeChanged += SecondScreenShowPanel_SizeChanged;
+            SecondScreenShowPanel_SizeChanged(null, null);
+        }
+
+        private void WebBrowser_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F12)
             {
@@ -107,12 +170,20 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             }
         }
 
-        private static void Panel_SizeChanged(object sender, EventArgs e)
+        private void Panel_SizeChanged(object sender, EventArgs e)
         {
             mainWindow.panel.Width = mainWindow.Width;
             mainWindow.panel.Height = mainWindow.Height-35;
             mainWindow.panel.Top = -5;
             mainWindow.panel.Left = 0;
+        }
+
+        private void SecondScreenShowPanel_SizeChanged(object sender, EventArgs e)
+        {
+            secodeScreenShowWindow.panel.Width = secodeScreenShowWindow.Width;
+            secodeScreenShowWindow.panel.Height = secodeScreenShowWindow.Height;
+            secodeScreenShowWindow.panel.Top = 0;
+            secodeScreenShowWindow.panel.Left = 0;
         }
 
         #region cefSharp与js交互
@@ -151,11 +222,24 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             {
                 actionType = ActionType.打印预览;
             }
-            mainWindow.Invoke((EventHandler)delegate
+            if ("secondScreen".ToLower().Equals(action.ToLower().Trim()))
             {
-                //设置预打印文件的路径，并执行对应的操作,data为打印文件路径
-                PrintUtil.Instance.SetPrintFilePath(data, actionType);
-            });
+                actionType = ActionType.第二显示器;
+            }
+            switch (actionType)
+            {
+                case ActionType.第二显示器://用于第二显示器显示
+                    data = data.Replace("#", "%23");
+                    this.secodeScreenShowWindow.myBrowser.Navigate(data);
+                    break;
+                default:
+                    this.window.Invoke((EventHandler)delegate
+                    {
+                        //设置预打印文件的路径，并执行对应的操作,data为打印文件路径
+                        PrintUtil.Instance.SetPrintFilePath(data, actionType);
+                    });
+                    break;
+            }
 
         }
         #endregion

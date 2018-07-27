@@ -24,7 +24,7 @@ namespace SuperCollectingSilver
     public partial class MainForm : Form
     {
 
-        private MyChromiumBrowser myBrowser;//浏览器对象
+        private MyChromiumBrowserExtend myBrowser;//浏览器对象
 
         private string printFilePath;//测试打印文件路径
 
@@ -33,13 +33,53 @@ namespace SuperCollectingSilver
 
         public Panel panel;
 
+        public Screen[] screenList;//显示器列表
+
+        public SecondScreenShowForm secondScreenShowWindow;//第二显示器显示的窗体
+
         public MainForm()
         {
             InitializeComponent();
 
+            //初始化谷歌浏览器的全局设置
+            MyChromiumBrowserExtend.BrowserInit();
+
+
+            #region 分屏显示设置
+            screenList = Screen.AllScreens;//获得设备上所有的显示器
+            if (screenList.Length > 0)
+            {
+                for (var i = 0; i < screenList.Length; i++)
+                {
+                    var screen = screenList[i];
+                    if (!screen.Primary)//判断不为主显示器
+                    {
+                        secondScreenShowWindow = new SecondScreenShowForm();
+                        Rectangle workArea = screen.WorkingArea;
+                        secondScreenShowWindow.Top = workArea.Top;
+                        secondScreenShowWindow.Left = workArea.Left;
+
+                        secondScreenShowWindow.WindowState = FormWindowState.Maximized;
+                        secondScreenShowWindow.Show();
+                    }
+                }
+            }
+            #endregion
+
             this.Load += MainForm_Load;
+            this.FormClosing += MainForm_FormClosing;
 
             this.Check();
+            
+
+        }
+
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            
+            退出系统ToolStripMenuItem_Click(null, null);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -49,8 +89,11 @@ namespace SuperCollectingSilver
 
             var path = Application.StartupPath + "\\HtmlUI\\test.html";
             path = path.Replace("#", "%23");
-            
-            myBrowser = MyChromiumBrowser.Instance(this);
+
+            //myBrowser = MyChromiumBrowser.Instance(this);
+            myBrowser = new MyChromiumBrowserExtend(this);
+            myBrowser.secodeScreenShowWindow = secondScreenShowWindow;
+
 
             //myBrowser.Navigate("http://192.168.0.102:8080/WDSHGL");
             //myBrowser.Navigate("http://localhost:8080/WDSHGL");
@@ -116,8 +159,11 @@ namespace SuperCollectingSilver
 
         private void 退出系统ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Dispose();
-            this.Close();
+            if (DialogResult.Yes == MessageBox.Show("您确定要退出吗?", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                this.Dispose();
+                this.Close();
+            }
         }
 
         private void 打印测试ToolStripMenuItem_Click(object sender, EventArgs e)
