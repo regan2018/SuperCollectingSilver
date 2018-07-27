@@ -150,6 +150,8 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             webBrowser.MenuHandler = new MenuHandler();
 
             webBrowser.KeyUp += WebBrowser_KeyUp;
+
+            webBrowser.FrameLoadEnd += SecondScreenShowWebBrowser_FrameLoadEnd;
             #endregion
 
             webBrowser.Dock = DockStyle.Fill;
@@ -184,6 +186,16 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             secodeScreenShowWindow.panel.Height = secodeScreenShowWindow.Height;
             secodeScreenShowWindow.panel.Top = 0;
             secodeScreenShowWindow.panel.Left = 0;
+        }
+        private static string filePath = "";
+        private void SecondScreenShowWebBrowser_FrameLoadEnd(object sender, FrameLoadEndEventArgs e)
+        {
+            filePath = filePath.Replace("%23", "#");
+            //第二屏幕显示的内容加载完后删除html文件
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
         }
 
         #region cefSharp与js交互
@@ -229,8 +241,12 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             switch (actionType)
             {
                 case ActionType.第二显示器://用于第二显示器显示
-                    data = data.Replace("#", "%23");
-                    this.secodeScreenShowWindow.myBrowser.Navigate(data);
+                    if (null != this.secodeScreenShowWindow)
+                    {
+                        data = data.Replace("#", "%23");
+                        filePath = data;
+                        this.secodeScreenShowWindow.myBrowser.Navigate(data);
+                    }
                     break;
                 default:
                     this.window.Invoke((EventHandler)delegate
@@ -242,6 +258,7 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             }
 
         }
+
         #endregion
 
         /// <summary>
