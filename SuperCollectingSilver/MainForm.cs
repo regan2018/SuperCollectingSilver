@@ -78,8 +78,15 @@ namespace SuperCollectingSilver
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
-            
-            退出系统ToolStripMenuItem_Click(null, null);
+            if (DialogResult.Yes == MessageBox.Show("是否最小化到托盘？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                this.Hide();
+                this.notifyIcon.Visible = true;
+            }
+            else
+            {
+                退出系统ToolStripMenuItem_Click(null, null);
+            }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -159,7 +166,7 @@ namespace SuperCollectingSilver
 
         private void 退出系统ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (DialogResult.Yes == MessageBox.Show("您确定要退出吗?", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            if (DialogResult.Yes == MessageBox.Show("您确定要退出吗?", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
             {
                 this.Dispose();
                 this.Close();
@@ -175,6 +182,24 @@ namespace SuperCollectingSilver
                 PrintUtil.Instance.SetPrintFilePath(printFilePath, ActionType.弹窗打印);
             });
         }
+        /// <summary>
+        /// 显示主界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void notifyIcon_DoubleClick(object sender, EventArgs e)
+        {
+            this.Show();
+            this.Activate();
+            this.WindowState = FormWindowState.Maximized;
+        }
+
+        private void 显示主界面toolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.notifyIcon_DoubleClick(null, null);
+        }
         #endregion
+
+
     }
 }
