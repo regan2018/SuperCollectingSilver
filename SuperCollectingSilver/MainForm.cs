@@ -41,39 +41,53 @@ namespace SuperCollectingSilver
         {
             InitializeComponent();
 
+            this.Check();
+
             //初始化谷歌浏览器的全局设置
             MyChromiumBrowserExtend.BrowserInit();
 
 
             #region 分屏显示设置
-            screenList = Screen.AllScreens;//获得设备上所有的显示器
-            if (screenList.Length > 0)
-            {
-                for (var i = 0; i < screenList.Length; i++)
-                {
-                    var screen = screenList[i];
-                    if (!screen.Primary)//判断不为主显示器
-                    {
-                        secondScreenShowWindow = new SecondScreenShowForm();
-                        Rectangle workArea = screen.WorkingArea;
-                        secondScreenShowWindow.Top = workArea.Top;
-                        secondScreenShowWindow.Left = workArea.Left;
-
-                        secondScreenShowWindow.WindowState = FormWindowState.Maximized;
-                        secondScreenShowWindow.Show();
-                    }
-                }
-            }
+            secondScreenShowWindow = new SecondScreenShowForm();
+            showOnMonitor(secondScreenShowWindow,1);
             #endregion
 
             this.Load += MainForm_Load;
             this.FormClosing += MainForm_FormClosing;
 
-            this.Check();
             
 
         }
 
+        #region 分屏显示设置
+        /// <summary>
+        /// 分屏显示处理
+        /// </summary>
+        /// <param name="window">要显示在指定屏幕的窗体</param>
+        /// <param name="showOnMonitor">设置显示在第几的一个显示监视器（从0开始）</param>
+        private void showOnMonitor(Form window,int showOnMonitor)
+        {
+            Screen[] sc;
+            sc = Screen.AllScreens;
+            if (showOnMonitor >= sc.Length)
+            {
+                showOnMonitor = sc.Length-1;
+            }
+
+            if(null== window)
+            {
+                window = new Form();
+            }
+
+
+            window.StartPosition = FormStartPosition.Manual;
+            window.Location = new Point(sc[showOnMonitor].Bounds.Left, sc[showOnMonitor].Bounds.Top);
+            // 如果你想使形式最大化，把它变成常态，然后最大化。
+            window.WindowState = FormWindowState.Normal;
+            window.WindowState = FormWindowState.Maximized;
+            window.Show();
+        }
+        #endregion
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -198,8 +212,14 @@ namespace SuperCollectingSilver
         {
             this.notifyIcon_DoubleClick(null, null);
         }
-        #endregion
 
+        private void 清除登录信息ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cef.GetGlobalCookieManager().DeleteCookies();
+            myBrowser.Reload();
+            MessageBox.Show("清除成功");
+        }
+        #endregion
 
     }
 }

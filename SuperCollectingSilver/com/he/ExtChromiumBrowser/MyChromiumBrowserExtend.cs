@@ -172,6 +172,14 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             }
         }
 
+        /// <summary>
+        /// 刷新
+        /// </summary>
+        public void Reload()
+        {
+            webBrowser.Reload();
+        }
+
         private void Panel_SizeChanged(object sender, EventArgs e)
         {
             mainWindow.panel.Width = mainWindow.Width;

@@ -36,6 +36,7 @@
             this.打印设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.打印测试ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出系统ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.清除登录信息ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,11 +53,12 @@
             this.notifyMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.notifyMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.显示主界面toolStripMenuItem,
+            this.清除登录信息ToolStripMenuItem,
             this.打印设置ToolStripMenuItem,
             this.打印测试ToolStripMenuItem,
             this.退出系统ToolStripMenuItem});
             this.notifyMenu.Name = "notifyMenu";
-            this.notifyMenu.Size = new System.Drawing.Size(176, 128);
+            this.notifyMenu.Size = new System.Drawing.Size(176, 152);
             // 
             // 显示主界面toolStripMenuItem
             // 
@@ -86,6 +88,13 @@
             this.退出系统ToolStripMenuItem.Text = "退出系统";
             this.退出系统ToolStripMenuItem.Click += new System.EventHandler(this.退出系统ToolStripMenuItem_Click);
             // 
+            // 清除登录信息ToolStripMenuItem
+            // 
+            this.清除登录信息ToolStripMenuItem.Name = "清除登录信息ToolStripMenuItem";
+            this.清除登录信息ToolStripMenuItem.Size = new System.Drawing.Size(175, 24);
+            this.清除登录信息ToolStripMenuItem.Text = "清除登录信息";
+            this.清除登录信息ToolStripMenuItem.Click += new System.EventHandler(this.清除登录信息ToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -107,6 +116,7 @@
         private System.Windows.Forms.ToolStripMenuItem 退出系统ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 打印测试ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 显示主界面toolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 清除登录信息ToolStripMenuItem;
     }
 }
 
