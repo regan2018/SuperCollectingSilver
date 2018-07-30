@@ -48,8 +48,11 @@ namespace SuperCollectingSilver
 
 
             #region 分屏显示设置
-            secondScreenShowWindow = new SecondScreenShowForm();
-            showOnMonitor(secondScreenShowWindow,1);
+            if (Screen.AllScreens.Length > 1)
+            {
+                secondScreenShowWindow = new SecondScreenShowForm();
+                showOnMonitor(secondScreenShowWindow, 1);
+            }
             #endregion
 
             this.Load += MainForm_Load;
