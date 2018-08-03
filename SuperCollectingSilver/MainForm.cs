@@ -95,15 +95,9 @@ namespace SuperCollectingSilver
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
-            if (DialogResult.Yes == MessageBox.Show("是否最小化到托盘？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-            {
-                this.Hide();
-                this.notifyIcon.Visible = true;
-            }
-            else
-            {
-                退出系统ToolStripMenuItem_Click(null, null);
-            }
+           
+            myBrowser.actionJsCode("handoverClass();");
+            
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -185,8 +179,7 @@ namespace SuperCollectingSilver
         {
             if (DialogResult.Yes == MessageBox.Show("您确定要退出吗?", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
             {
-                this.Dispose();
-                this.Close();
+                this.Exit();
             }
         }
 
@@ -223,6 +216,15 @@ namespace SuperCollectingSilver
             MessageBox.Show("清除成功");
         }
         #endregion
+
+        /// <summary>
+        /// 退出应用程序
+        /// </summary>
+        public void Exit()
+        {
+            this.Dispose();
+            this.Close();
+        }
 
     }
 }

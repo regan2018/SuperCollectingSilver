@@ -210,7 +210,6 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
         /// <summary>
         /// 运行js代码
         /// </summary>
-        /// <param name="browser"></param>
         /// <param name="jsCode"></param>
         public void actionJsCode(string jsCode)
         {
@@ -246,6 +245,10 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
             {
                 actionType = ActionType.第二显示器;
             }
+            if ("exit".ToLower().Equals(action.ToLower().Trim()))
+            {
+                actionType = ActionType.退出程序;
+            }
             switch (actionType)
             {
                 case ActionType.第二显示器://用于第二显示器显示
@@ -254,6 +257,12 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
                         data = data.Replace("#", "%23");
                         filePath = data;
                         this.secodeScreenShowWindow.myBrowser.Navigate(data);
+                    }
+                    break;
+                case ActionType.退出程序://用于关闭应用程序
+                    if (null != this.mainWindow)
+                    {
+                        this.mainWindow.Exit();
                     }
                     break;
                 default:
