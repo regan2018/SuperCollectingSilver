@@ -222,8 +222,11 @@ namespace SuperCollectingSilver
         /// </summary>
         public void Exit()
         {
-            this.Dispose();
-            this.Close();
+            this.Invoke((EventHandler)delegate
+            {
+                this.Dispose();
+                this.Close();
+            });
         }
 
     }
