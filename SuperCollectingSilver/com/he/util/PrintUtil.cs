@@ -20,6 +20,22 @@ namespace SuperCollectingSilver.com.he.util
         private ActionType actionType;
 
         private PrintUtil() {
+            this.Init();
+        }
+
+        private void Init()
+        {
+            try
+            {
+                
+                this.webBrowser.Dispose();
+                GC.Collect();
+                //GC.WaitForPendingFinalizers();
+                this.webBrowser = null;
+
+            }
+            catch (Exception e) { }
+
             this.webBrowser = new WebBrowser();
             this.webBrowser.Hide();
             this.webBrowser.DocumentCompleted += WebBrowser_DocumentCompleted;
@@ -32,6 +48,8 @@ namespace SuperCollectingSilver.com.he.util
         /// <param name="actionType">操作</param>
         public void SetPrintFilePath(string printFilePath,ActionType actionType)
         {
+            this.Init();
+
             this.actionType = actionType;
             this.printFilePath = printFilePath;
             this.webBrowser.Navigate(printFilePath);

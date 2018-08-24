@@ -59,6 +59,7 @@ namespace SuperCollectingSilver.com.he.ExtChromiumBrowser
 
             setting.CefCommandLineArgs.Add("Connection", "keep-alive");
             setting.CefCommandLineArgs.Add("Accept-Encoding", "gzip, deflate, br");
+            setting.CefCommandLineArgs.Add("enable-media-stream", "1");
 
             CefSharp.Cef.Initialize(setting);
             #endregion
